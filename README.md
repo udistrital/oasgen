@@ -42,3 +42,5 @@ oasgen down : Detener ambiente de desarrollo
 oasgen check : Verificar requirimientos minimos del sistema
 oasgen logs : Ver los logs del ambiente de desarrollo
 ```
+Ver en accion Oasgen
+![](https://raw.githubusercontent.com/udistrital/oasgen/master/help/output.gif)
