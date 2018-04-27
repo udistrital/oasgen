@@ -1,0 +1,47 @@
+/*
+  Entity DSL grammar.
+*/
+
+EntityModel:
+    types*=SimpleType
+    entities+=Entity
+;
+
+Entity:
+    'entity' name=ID '{'
+        properties+=Property // Each entity has one or more properties.
+    '}'
+;
+
+Property:
+    name=ID ':' type=[Type] (empty_constraint=EmptyConstraint)? (size_constraint=SizeConstraint)? (relation_type=RelationOption)?
+;
+
+// Type can be SimpleType or Entity
+Type:
+    SimpleType | Entity
+;
+
+EmptyConstraint:
+  'empty=' value=BOOL
+;
+
+SizeConstraint:
+  'size=' value=INT
+;
+
+SimpleType:
+    'type' name=ID
+;
+
+RelationOption:
+   'relation=' value=RelationType
+;
+
+RelationType:
+  "embed" | "reference"
+;
+
+Comment:
+    /\/\/.*$/
+;

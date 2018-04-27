@@ -1,0 +1,245 @@
+#!/bin/bash
+
+function oashelp {
+
+  echo ""
+  echo "Uso oasgen: "
+  echo "oasgen init <proyecto> : Generar un proyecto"
+  echo "oasgen reset / turnoff : Reset de la herramienta"
+  echo "oasgen status: Consulta el estado del generador"
+  echo "oasgen generate <nombre_proyecto> : Generar CRUD basado en archivo .ent"
+  echo "oasgen copy  : Copiar los archivos generados al ambiente de desarrollo"
+  echo "oasgen up : Inicializar el ambiente de desarrollo"
+  echo "oasgen down : Detener ambiente de desarrollo"
+  echo "oasgen check : Verificar requirimientos minimos del sistema"
+  echo "oasgen logs : Ver los logs del ambiente de desarrollo"
+
+}
+
+function cp_project {
+
+  if [ -d "./srcgen" ]; then
+    echo "Directorio de codigo generado encontrado .... [OK]"
+
+    if [ -d "../angular4" ] && [ -d "../beego" ]; then
+      echo "Entorno de desarrollo encontrado .... [OK]"
+      echo ""
+      echo "Moviendo archivos de backend .... [OK]"
+      cp -r $PWD/srcgen/backend/* $PWD/../beego/code
+
+      echo "Moviendo archivos de frontend .... [OK]"
+      cp -r $PWD/srcgen/frontend/* $PWD/../angular4/code/src/app
+
+    else
+      echo "Entorno de desarrollo no encontrado .... [!]"
+    fi
+
+  else
+    echo "Directorio de codigo generado no encontrado .... [!]"
+  fi
+
+}
+
+function project_logs {
+  if [ -f "docker-compose.yml" ]; then
+    echo "Conectandose a los logs del ambiente de desarrollo"
+    docker-compose logs -f
+  else
+    echo "No se encuentra el archivo docker-compose para inicializar el proyecto"
+  fi
+}
+
+function project_up {
+  if [ -f "docker-compose.yml" ]; then
+    echo "Inicializando el ambiente de desarrollo"
+    clean_project
+    echo
+    docker-compose up -d
+    echo "Ambiente de desarrollo inicializado .... [OK]"
+    sleep 10
+    echo "La aplicacion esta disponible en http://localhost:4200, abriendo el navegador automaticamente"
+    if [ ! -z $(command -v xdg-open) ]; then
+        xdg-open http://localhost:4200 > /dev/null 2>&1
+    fi
+  else
+    echo "No se encuentra el archivo docker-compose para inicializar el proyecto"
+  fi
+}
+
+function project_down {
+  if [ -f "docker-compose.yml" ]; then
+    echo "Deteniendo el ambiente de desarrollo"
+    clean_project
+  else
+    echo "No se encuentra el archivo docker-compose detener el proyecto"
+  fi
+}
+
+
+function clean_project {
+
+   docker stop angular4 mongo-express beego swagger-editor mongodb > /dev/null 2>&1
+   docker rm angular4 mongo-express beego swagger-editor mongodb > /dev/null 2>&1
+
+}
+
+function reset {
+  docker stop oasgen local-mongo > /dev/null 2>&1
+  docker rm oasgen local-mongo > /dev/null 2>&1
+  rm -rf $OASGEN_PATH/srcgen/* > /dev/null 2>&1
+
+  if [ -d "$PWD/srcgen" ]; then
+     rm -rf $PWD/srcgen
+  fi
+}
+
+function prepare {
+
+  if [ ! -f $1 ]; then
+    echo "El archivo de entidades especificado no existe, verifique la ruta e intente de nuevo"
+    exit 1
+  fi
+
+  # Extraer el nombre del archivo de entidades
+  entities_file_path=$1
+  entities_file_name="${entities_file_path##*/}"
+
+  # Eliminar cualquier entidad que ya exista
+  rm -rf $OASGEN_PATH/entities/*
+  rm -rf $PWD/srcgen
+
+  # Borrar el codigo que se haya generado antes
+  rm -rf $OASGEN_PATH/srcgen/*
+
+  # Copiar la entidad a la carpeta de entidades
+  cp $1 $OASGEN_PATH/entities
+
+}
+
+function gen {
+
+  # Extraer el nombre del archivo de entidades
+  entities_file_path=$1
+  entities_file_name="${entities_file_path##*/}"
+
+  # Hacer la llamada a Docker para genere el codigo
+  docker exec -it oasgen bash -c "python /tool/entity_codegen.py $entities_file_name"
+
+  # Apropiarse de los archivos
+  user_id=`id -u $(whoami)`
+  docker exec -it oasgen bash -c "chown -R $user_id:$user_id /tool/srcgen "
+
+  # Copiar los resultados de regreso a la carpeta donde los necesita
+  cp -r $OASGEN_PATH/srcgen $PWD
+
+}
+
+function status {
+  # Verificar que el contenedor este corriendo
+  docker_running=`docker ps -q -f name=^/oasgen$`
+
+  if [ -z "$docker_running" ]; then
+    echo "oasgen inactivo"
+  else
+    echo "oasgen inicializado"
+  fi
+
+}
+
+function init_oasgen_container {
+
+  # Verificar que el contenedor este corriendo
+  docker_running=`docker ps -q -f name=^/oasgen$`
+  project_home=$PWD
+
+  if [ -z "$docker_running" ]; then
+    echo "El contenedor del generador no esta corriendo, se va a inicializar OASGEN por primera vez ..."
+    cd $OASGEN_PATH
+    docker-compose build > /dev/null 2>&1
+    docker-compose up -d > /dev/null 2>&1
+    echo "El contenedor para oasgen ha sido inicializado"
+    echo ""
+    cd $project_home
+  fi
+
+}
+
+function validate_params {
+
+  case "$1" in
+    "init")
+      if [ -z "$2" ]; then
+        oashelp
+      else
+        init_oasgen_container
+        echo "Inicializando proyecto ..."
+        if [ ! -z $(command -v unzip) ]; then
+            echo "Inicializando entorno base"
+            unzip -d $2 $OASGEN_PATH/base/base.zip | awk 'BEGIN {ORS=" "} {if(NR%200==0)print "."}'
+            echo "Finalizado!"
+            mv $PWD/$2/dev-env/* $PWD/$2
+            rm -rf $PWD/$2/dev-env
+        fi
+      fi
+    ;;
+
+    "generate")
+      if [ -z "$2" ]; then
+        echo "Debe indicar el archivo de entidades "
+      else
+        prepare $2
+        init_oasgen_container
+        gen $2
+      fi
+    ;;
+
+    "status")
+      status
+      exit 0
+    ;;
+
+    "up")
+      project_up
+      exit 0
+    ;;
+
+    "logs")
+      project_logs
+      exit 0
+    ;;
+
+    "down")
+      project_down
+      exit 0
+    ;;
+
+    "copy" | "cp")
+      cp_project
+      exit 0
+    ;;
+
+    "reset"| "turnoff")
+      echo "Reset de Oasgen"
+      reset
+      exit 0
+    ;;
+
+    "check")
+      echo "Verificando requirimientos del sistema minimos ..."
+      exit 0
+    ;;
+
+  esac
+
+  if [ -z "$2" ]; then
+    oashelp
+  fi
+
+}
+
+
+if [ -z "$1" ]; then
+   oashelp
+else
+  validate_params $1 $2
+fi

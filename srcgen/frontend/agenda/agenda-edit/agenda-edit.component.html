@@ -1,0 +1,46 @@
+<h3>Edici&oacute;n Agenda</h3>
+<p-dialog header="Agenda" [(visible)]="display">
+  La agenda ha sido editada correctamente
+  <p-footer>
+    <button type="button" pButton icon="fa-check" (click)="cerrarDialogo()" label="Cerrar"></button>
+  </p-footer>
+</p-dialog>
+<div class="ui-g">
+  <div class="ui-g-8">
+    <form class="form-horizontal">
+    <!------------------------------------------------>
+    <div class="form-group">
+      <label for="nombre" class="col-sm-2 control-label">Nombre </label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="nombre" placeholder="Nombre Agenda" [(ngModel)]="agenda.nombre" name="nombre">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="apellido" class="col-sm-2 control-label">Apellido </label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="apellido" placeholder="Apellido Agenda" required [(ngModel)]="agenda.apellido" name="apellido" #apellido="ngModel">
+        <div [hidden]="apellido.valid || apellido.pristine " class="invalid-feedback alert alert-danger">
+            El campo apellido no puede estar vacio
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="persona" class="col-sm-2 control-label">Persona </label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="persona" placeholder="Persona Agenda" required [(ngModel)]="agenda.persona" name="persona" #persona="ngModel">
+        <div [hidden]="persona.valid || persona.pristine " class="invalid-feedback alert alert-danger">
+            El campo persona no puede estar vacio
+        </div>
+      </div>
+    </div>
+
+    <!------------------------------------------------>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default" (click)="actualizar(agenda)" [disabled]="!AgendaForm.form.valid">Actualizar</button>
+          <button type="submit" class="btn btn-default" (click)="regresar()">Cancelar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

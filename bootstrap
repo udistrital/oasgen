@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export OASGEN_PATH=$PWD
+PATH=$PATH:$OASGEN_PATH/bin
