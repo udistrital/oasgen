@@ -30,6 +30,8 @@ Con esto tendrá disponible el generador el cual podrá ejecutar como:
 oasgen generate <archivo_entidad.ent>
 
 Uso oasgen:
+
+```
 oasgen init <proyecto> : Generar un proyecto
 oasgen reset / turnoff : Reset de la herramienta
 oasgen status: Consulta el estado del generador
@@ -39,3 +41,4 @@ oasgen up : Inicializar el ambiente de desarrollo
 oasgen down : Detener ambiente de desarrollo
 oasgen check : Verificar requirimientos minimos del sistema
 oasgen logs : Ver los logs del ambiente de desarrollo
+```
