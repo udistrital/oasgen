@@ -3,7 +3,7 @@
 Este proyecto permite generar aplicaciones Restful mediante la definicion de un modelo de datos
 
 
-### Instalacion
+### Instalación
 
 Con permisos de administrador ejecute:
 
@@ -29,16 +29,13 @@ Con esto tendrá disponible el generador el cual podrá ejecutar como:
 
 oasgen generate <archivo_entidad.ent>
 
-echo "Uso oasgen: "
-echo "oasgen init <proyecto> : Generar un proyecto"
-echo "oasgen reset / turnoff : Reset de la herramienta"
-echo "oasgen status: Consulta el estado del generador"
-echo "oasgen generate <nombre_proyecto> : Generar CRUD basado en archivo .ent"
-echo "oasgen copy  : Copiar los archivos generados al ambiente de desarrollo"
-echo "oasgen up : Inicializar el ambiente de desarrollo"
-echo "oasgen down : Detener ambiente de desarrollo"
-echo "oasgen check : Verificar requirimientos minimos del sistema"
-echo "oasgen logs : Ver los logs del ambiente de desarrollo"
-
-Esto generará una carpeta con el nombre srcgen donde se encuentra el código fuente listo para su aplicación tanto
-backend como frontend.
+Uso oasgen:
+oasgen init <proyecto> : Generar un proyecto
+oasgen reset / turnoff : Reset de la herramienta
+oasgen status: Consulta el estado del generador
+oasgen generate <nombre_proyecto> : Generar CRUD basado en archivo .ent
+oasgen copy  : Copiar los archivos generados al ambiente de desarrollo
+oasgen up : Inicializar el ambiente de desarrollo
+oasgen down : Detener ambiente de desarrollo
+oasgen check : Verificar requirimientos minimos del sistema
+oasgen logs : Ver los logs del ambiente de desarrollo
