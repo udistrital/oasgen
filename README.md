@@ -44,3 +44,22 @@ oasgen logs : Ver los logs del ambiente de desarrollo
 ```
 Ver en accion Oasgen
 ![](https://raw.githubusercontent.com/udistrital/oasgen/master/help/output.gif)
+
+### Solucion de Problemas
+
+Para listar todos los contenedores que estan corriendo
+```
+docker ps -a
+``` 
+
+Para listar todos los contenedores que estan corriendo pero solo su container ID
+```
+docker ps -aq 
+```
+
+Para borrar todos los contenedores que no esten corriendo * Soluciona el conflicto de contenedores pre-existentes"
+
+```
+docker rm $(docker ps -qa)
+```
+
