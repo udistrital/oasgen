@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function install_oasgen {
+
+  echo "oasgen=1" >> $HOME/.oasgenrc
+
+}
+
+install_oasgen
