@@ -1,10 +1,5 @@
 entity Agenda {
-    nombre : string empty=True size=100
-    apellido: string
-    persona: Persona relation=embed
-
-}
-
-entity Persona {
-   nombre: string empty=False
+    nombre : string
+    apellido : string
+    telefono : string
 }

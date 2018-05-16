@@ -40,6 +40,19 @@ function cp_project {
 
 }
 
+function open_command {
+
+   case "$(uname -a)" in
+      "Darwin")
+        open $1
+        ;;
+      "Linux")
+        xdg-open $1
+        ;;
+   esac
+
+}
+
 function project_logs {
   if [ -f "docker-compose.yml" ]; then
     echo "Conectandose a los logs del ambiente de desarrollo"
@@ -59,7 +72,7 @@ function project_up {
     sleep 10
     echo "La aplicacion esta disponible en http://localhost:4200, abriendo el navegador automaticamente"
     if [ ! -z $(command -v xdg-open) ]; then
-        xdg-open http://localhost:4200 > /dev/null 2>&1
+        open_command http://localhost:4200 > /dev/null 2>&1
     fi
   else
     echo "No se encuentra el archivo docker-compose para inicializar el proyecto"
