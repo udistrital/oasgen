@@ -4,9 +4,8 @@ function install_oasgen {
 
   echo "oasgen=1" >> $HOME/.oasgenrc
   git clone https://github.com/udistrital/oasgen.git $HOME/.oasgen
-  oasgen_path="$HOME/.oasgen"
-  echo "export OASGEN_PATH=$oasgen_path" >> $HOME/.bashrc
-  echo "PATH=$PATH:$OASGEN_PATH/bin" >> $HOME/.bashrc
+  echo "export OASGEN_PATH=\$HOME/.oasgen/bin" >> $HOME/.bashrc
+  echo "PATH=\$PATH:\$HOME/.oasgen/bin" >> $HOME/.bashrc
 }
 
 install_oasgen
