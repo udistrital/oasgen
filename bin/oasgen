@@ -45,6 +45,7 @@ function update_oasgen {
    echo "Updating oasgen tool"
    cd $OASGEN_PATH
    git pull -q origin master
+   reset
    echo "Done!"
 }
 
