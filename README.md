@@ -1,5 +1,5 @@
 # OASGEN
-OASGEN es un generador de código basado en MDA, el cual permite la creación de aplicaciones basados en una arquitectura SOA.
+OASGEN es un generador de código basado en [MDA](https://en.wikipedia.org/wiki/Model-driven_architecture), el cual permite la creación de aplicaciones basados en una arquitectura [SOA](https://en.wikipedia.org/wiki/Service-oriented_architecture).
 Los componentes principales de la aplicación generada constan de un servicio RESFTUL generado en [Beego](https://beego.me/),
 un framework de desarrollo web creado en [Golang](https://golang.org/) y un cliente web generado en [Angular 4](https://angular.io/).
 
