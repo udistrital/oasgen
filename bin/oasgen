@@ -78,6 +78,14 @@ function project_logs {
   fi
 }
 
+function test_up {
+   echo "Esperando que la aplicacion este disponible "
+   until [ $(curl -o -I -L -s -w "%{http_code}\n" http://localhost:4200) -eq "200" ]; do
+     printf "."
+     sleep 1
+   done
+}
+
 function project_up {
   if [ -f "docker-compose.yml" ]; then
     echo "Inicializando el ambiente de desarrollo"
@@ -85,7 +93,7 @@ function project_up {
     echo
     docker-compose up -d
     echo "Ambiente de desarrollo inicializado .... [OK]"
-    sleep 10
+    test_up
     echo "La aplicacion esta disponible en http://localhost:4200, abriendo el navegador automaticamente"
     open_command http://localhost:4200 > /dev/null 2>&1
   else
