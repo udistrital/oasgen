@@ -55,8 +55,15 @@ function open_command {
       "Darwin")
         open $1
         ;;
+
       "Linux")
-        xdg-open $1
+          if [ ! -z $(command -v xdg-open) ]; then
+              xdg-open $1
+          fi
+        ;;
+        *)
+
+         echo "No puedo abrir automaticamente este proyecto en el navegador"
         ;;
    esac
 
@@ -80,9 +87,7 @@ function project_up {
     echo "Ambiente de desarrollo inicializado .... [OK]"
     sleep 10
     echo "La aplicacion esta disponible en http://localhost:4200, abriendo el navegador automaticamente"
-    if [ ! -z $(command -v xdg-open) ]; then
-        open_command http://localhost:4200 > /dev/null 2>&1
-    fi
+    open_command http://localhost:4200 > /dev/null 2>&1
   else
     echo "No se encuentra el archivo docker-compose para inicializar el proyecto"
   fi
@@ -253,6 +258,11 @@ function validate_params {
 
     "update")
       update_oasgen
+      exit 0
+    ;;
+
+    *)
+      oashelp
       exit 0
     ;;
 
