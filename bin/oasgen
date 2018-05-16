@@ -94,7 +94,7 @@ function project_up {
     docker-compose up -d
     echo "Ambiente de desarrollo inicializado .... [OK]"
     test_up
-    echo "La aplicacion esta disponible en http://localhost:4200, abriendo el navegador automaticamente"
+    printf "\nLa aplicacion esta disponible en http://localhost:4200, abriendo el navegador automaticamente\n"
     open_command http://localhost:4200 > /dev/null 2>&1
   else
     echo "No se encuentra el archivo docker-compose para inicializar el proyecto"
