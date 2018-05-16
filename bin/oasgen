@@ -42,7 +42,7 @@ function cp_project {
 
 function open_command {
 
-   case "$(uname -a)" in
+   case "$(uname -s)" in
       "Darwin")
         open $1
         ;;
