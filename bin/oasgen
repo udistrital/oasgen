@@ -13,6 +13,7 @@ function oashelp {
   echo "oasgen down : Detener ambiente de desarrollo"
   echo "oasgen check : Verificar requirimientos minimos del sistema"
   echo "oasgen logs : Ver los logs del ambiente de desarrollo"
+  echo "oasgen update"
 
 }
 
@@ -38,6 +39,13 @@ function cp_project {
     echo "Directorio de codigo generado no encontrado .... [!]"
   fi
 
+}
+
+function update_oasgen {
+   echo "Updating oasgen tool"
+   cd $OASGEN_PATH
+   git pull -q origin master
+   echo "Done!"
 }
 
 function open_command {
@@ -239,6 +247,11 @@ function validate_params {
 
     "check")
       echo "Verificando requirimientos del sistema minimos ..."
+      exit 0
+    ;;
+
+    "update")
+      update_oasgen
       exit 0
     ;;
 
