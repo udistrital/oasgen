@@ -13,7 +13,7 @@ function oashelp {
   echo "oasgen down : Detener ambiente de desarrollo"
   echo "oasgen check : Verificar requirimientos minimos del sistema"
   echo "oasgen logs : Ver los logs del ambiente de desarrollo"
-  echo "oasgen update"
+  echo "oasgen update: Actualizar oasgen a la ultima version disponible"
 
 }
 
