@@ -5,6 +5,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2"
 	"fmt"
+  {% for property in entity.properties %}
+  {% if property.type.name == "time"%}
+  "time"
+  {% break %}
+  {% endif %}
+  {% endfor %}
 )
 
 const {{entity.name}}Collection = "{{entity.name|lower}}"

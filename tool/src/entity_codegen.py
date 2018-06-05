@@ -27,8 +27,6 @@ def main(entity,debug=False):
         print(Style.RESET_ALL)
         sys.exit(1)
 
-    #print entity_model.entities
-
     def is_entity(n):
         """
         Test to prove if some type is an entity
@@ -40,14 +38,16 @@ def main(entity,debug=False):
 
     def beegotype(s):
         return {
+                'float': 'float64',
                 'int': 'int',
                 'string': 'string',
                 'bool': 'bool',
-                'time': 'Time.time'
+                'time': 'time.Time'
         }.get(s.name)
 
     def angulartype(s):
         return {
+                'float': 'number',
                 'int': 'number',
                 'string': 'string',
                 'bool': 'boolean',
@@ -101,7 +101,9 @@ def main(entity,debug=False):
     jinja_env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(this_folder),
         trim_blocks=True,
-        lstrip_blocks=True)
+        lstrip_blocks=True,
+        extensions=['jinja2.ext.loopcontrols']
+        )
 
     # Register filter for mapping Entity type names to beego type names.
     jinja_env.filters['beegotype'] = beegotype
