@@ -14,6 +14,7 @@ function oashelp {
   echo "oasgen check : Verificar requirimientos minimos del sistema"
   echo "oasgen logs : Ver los logs del ambiente de desarrollo"
   echo "oasgen update: Actualizar oasgen a la ultima version disponible"
+  echo "oasgen play: Correr el proyecto sin el paso a paso"
 
 }
 
@@ -30,6 +31,9 @@ function cp_project {
 
       echo "Moviendo archivos de frontend .... [OK]"
       cp -r $PWD/srcgen/frontend/* $PWD/../angular4/code/src/app
+
+      echo "Removiendo archivos originales .... [OK]"
+      rm -rf $PWD/srcgen
 
     else
       echo "Entorno de desarrollo no encontrado .... [!]"
@@ -84,6 +88,7 @@ function test_up {
      printf "."
      sleep 1
    done
+   rm -- -I
 }
 
 function project_up {
@@ -149,6 +154,19 @@ function prepare {
   # Copiar la entidad a la carpeta de entidades
   cp $1 $OASGEN_PATH/entities
 
+}
+
+function play  {
+
+  if [ -f "$PWD/entities/example.ent" ]; then
+      echo "Playing project ..."
+      cd $PWD/entities
+      validate_params "generate" "example.ent"
+      cp_project
+      cd ..
+      echo "Proyecto generado !, espera unos minutos ... :)"
+      project_up
+  fi
 }
 
 function gen {
@@ -222,7 +240,7 @@ function validate_params {
         echo "Inicializando proyecto ..."
         if [ ! -z $(command -v unzip) ]; then
             echo "Inicializando entorno base"
-            unzip -d $2 $OASGEN_PATH/base/base.zip | awk 'BEGIN {ORS=" "} {if(NR%200==0)print "."}'
+            unzip -q -d $2 $OASGEN_PATH/base/base.zip
             echo "Finalizado!"
             mv $PWD/$2/dev-env/* $PWD/$2
             rm -rf $PWD/$2/dev-env
@@ -278,6 +296,11 @@ function validate_params {
 
     "update")
       update_oasgen
+      exit 0
+    ;;
+
+    "play")
+      play
       exit 0
     ;;
 

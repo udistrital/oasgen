@@ -1,6 +1,6 @@
 <h3>Creaci&oacute;n {{entity.name|capitalize}}</h3>
 <p-dialog header="{{entity.name|capitalize}}s" [(visible)]="display">
-  La {{entity.name|lower}} ha sido editada correctamente
+  La {{entity.name|lower}} ha sido creada correctamente
   <p-footer>
     <button type="button" pButton icon="fa-check" (click)="cerrarDialogo()" label="Cerrar"></button>
   </p-footer>
@@ -10,6 +10,7 @@
     <form class="form-horizontal" #{{entity.name}}Form="ngForm">
     <!------------------------------------------------>
     {% for property in entity.properties %}
+
     {% if property.type.name == "time" %}
     <div class="form-group">
       <label for="{{property.name|lower}}" class="col-sm-2 control-label">{{property.name|capitalize}}</label>
@@ -17,7 +18,9 @@
           <date-picker mode="datetime" [(ngModel)]="{{entity.name|lower}}.{{property.name|lower}}" name="{{property.name|lower}}"></date-picker>
       </div>
     </div>
-    {% elif property.type.name == "boolean" %}
+    {% endif %}
+
+    {% if property.type.name == "bool" %}
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <div class="checkbox">
@@ -27,7 +30,25 @@
         </div>
       </div>
     </div>
-    {% else %}
+    {% endif %}
+
+    {% if property.type.name == "int" or property.type.name == "float" %}
+    <div class="form-group">
+      <label for="{{property.name|lower}}" class="col-sm-2 control-label">{{property.name|capitalize}} </label>
+      <div class="col-sm-10">
+        {% if not property.empty_constraint.value %}
+        <input type="number" class="form-control" id="{{property.name|lower}}" placeholder="{{property.name|capitalize}} {{entity.name|capitalize}}" required [(ngModel)]="{{entity.name|lower}}.{{property.name|lower}}" name="{{property.name|lower}}" #{{ property.name }}="ngModel">
+        <div [hidden]="{{ property.name }}.valid || {{ property.name }}.pristine " class="invalid-feedback alert alert-danger">
+            El campo {{ property.name }} no puede estar vacio
+        </div>
+        {% else %}
+        <input type="number" class="form-control" id="{{property.name|lower}}" placeholder="{{property.name|capitalize}} {{entity.name|capitalize}}" [(ngModel)]="{{entity.name|lower}}.{{property.name|lower}}" name="{{property.name|lower}}">
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if property.type.name == "string" %}
     <div class="form-group">
       <label for="{{property.name|lower}}" class="col-sm-2 control-label">{{property.name|capitalize}} </label>
       <div class="col-sm-10">
