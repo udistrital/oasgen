@@ -1,5 +1,112 @@
-entity Agenda {
+entity Proceso {
+   eleccion: Eleccion
+   nombre: string empty=false
+   fecha_inicio : time
+   fecha_final : time
+}
+
+entity Eleccion {
     nombre : string
-    apellido : string
-    telefono : string
+    votante : Votante
+    ponderacion : Ponderacion
+    responsable : Usuario
+    habilitado : bool
+}
+
+entity Tarjeton {
+    candidato : Candidato relation=reference
+    eleccion: Eleccion
+    configuracion: Configuracion relation=embed
+}
+
+entity Configuracion {
+    columnas  : int
+    filas : int
+}
+
+entity Candidato {
+    nombre : string empty=false
+    apellidos : string empty=false
+    correo : string empty=false
+    dependencia : string
+    partido : string
+    foto: string
+
+}
+
+entity Votante {
+    identificacion : string empty=false
+    nombre : string empty=false
+    apellidos : string empty=false
+    codigo : string empty=false
+    estamento : Estamento empty=false relation=reference
+}
+
+entity Sufragante {
+    sufragante: Votante relation=reference
+    evento: Evento relation=embed
+}
+
+entity Evento {
+    tipo : string
+    modulo : string
+    usuario : string
+    fecha : time
+    ip : string
+}
+
+entity Usuario {
+    nombre : string
+    apellidos : string
+    identificacion : string
+    roles : string
+    contrasena : string
+}
+
+entity Historia {
+    jornada : string
+    resultado : Eleccion relation=reference
+}
+
+entity Rol {
+    modulo : string
+    permisos : string
+}
+
+entity Variable {
+    tipo : string
+    valor : string
+    nombre : string
+}
+
+entity Ponderacion {
+    estamento : Estamento relation=reference
+    porcentaje : float
+    nombre : string
+}
+
+entity Partido  {
+
+  nombre: string
+
+}
+
+entity Estamento {
+
+    nombre: string
+
+}
+
+entity Voto {
+   candidato: Candidato relation=reference
+   evento: Evento relation=embed
+}
+
+
+entity Certificado {
+
+  proceso: Proceso relation=reference
+  eleccion: Eleccion relation=reference
+  sufragante: Sufragante relation=reference
+
 }
