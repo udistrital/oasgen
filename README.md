@@ -29,12 +29,7 @@ Una vez haya ejecutado el comando anterior, cierre la terminal e inicie una nuev
 
 ### Uso
 
-Una vez instalado el generador podra utilizar la ayuda ejecutando el comando
-
-```
-oasgen help
-
-```
+Una vez instalado el generador podra utilizar la ayuda ejecutando el comando `oasgen help`.
 
 Este comando le mostrara las opciones disponibles que presenta el generador
 
@@ -50,7 +45,12 @@ oasgen down : Detener ambiente de desarrollo
 oasgen check : Verificar requirimientos minimos del sistema
 oasgen logs : Ver los logs del ambiente de desarrollo
 oasgen update: Actualizar oasgen a la ultima version disponible
+oasgen play: Correr el proyecto sin el paso a paso
 ```
+
+Si desea correr el ejemplo sin necesidad de ejecutar todos los comandos, ejecute en la carpeta raiz
+del proyecto el comando `oasgen play`.
+
 
 ### Ver en accion Oasgen
 
